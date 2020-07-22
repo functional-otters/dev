@@ -1,0 +1,116 @@
+# Meeting notes - 2020-07-22
+
+Compare different methods for inferring functional connectivity from spike data.
+
+What does a measure of functional connectivity look like?
+    - doesn't have to be binary,
+    - could be a continuum.
+
+Uncertainty in statistical estimators.
+    - noisy finite input data.
+    - confidence interval.
+
+pressure chamber for worm :)
+
+model selection problem: find right bin size.
+    maximum latency
+    resolution: bin size
+    loops
+    osolations
+
+different analysis for spike trains vs. firing rates
+
+* spike time cross-correlation
+    - distribution of point processes / poisson
+    - actual observation are spikes
+
+- For GLM (spikes or rates matter)
+    + poisson likelihood
+    + issue -> have to estimate firing rate from spikes
+
+information in spikes that is not in the firing rates?
+
+output: measure of statistical dependency
+
+## Action points
+
+* spikes vs. rates?
+
+* cross-correlation analysis
+* GLM
+
+how are you going to do the statistics for this?
+    - null hypothesis?
+    - confidence intervals?
+
+how to compare these different methods?
+
+make a toy model where you know ground truth.
+    - check that you get reasonable data
+    - there is a true functional connectivity (function of the distribution)
+    - product of the activity of the network.
+
+how closely does functional connectivity correspond to synaptic connectivity?
+
+suppose I define a random function that takes spike data as input and produces a random output, what is the (non-invertible) mapping?
+
+Betsy: "Conclusion: we should be skeptical of our results."
+Ryan: "Oh. You should always be skeptical about everything."
+
+
+## Foundational
+
+Neurotransmitters (frog heart)
+H&H
+Muscle Activation
+
+### Theory
+
+Hebbian Learning
+    - how do cell assemblies wire into this structure - "fire together, write together"
+
+#### Influential (don't know yet if they are right)
+
+* Attractor models (stable states, represent behavioural variables, memories..)
+    - Feboda lab, just on the edge of being possible to validate.
+    - Hoppfield
+    - pertubations (through optogenetics, microstimulation -> may hammer it off the manifold entirely)
+
+* Experimental observations that spawn new areas of research
+   - e.g. Hippocampal place cells (encode high level cognitive variables. just because they encode it doesn't mean that's their job)
+   - influential in terms of sparking a lot of research
+
+* Wolfram Shultz (dopamine)
+    - trumpf of computational neuroscience (dopamine encoding predicion error?.. this is not the whole story.)
+        - found a signal in the brain that looked much like the temporal learning from ML. last in a sequence 
+
+no free lunch theorem
+
+De Carlo
+- trained on image recognition task.
+- run stimuli through the network
+- compare activations in layers with those of a monkey activations.
+- feature detectors of ANN for lines, edges, similar to those seen in the monkey.
+
+Aldshousen and Fields
+- sparse coding in V1
+- took images, ran through linear coder.
+- combination of reconstruction error term and penalty (of activation of many neurons => have it be sparse)
+- looks like V1, oriented gaubor patches
+- what if V1 activation looks the way they do because of the objective function (sparse coding).
+
+Marr's level of explanation
+    - mindful of what level you are operating at
+
+
+* Which would be the most groundbreaking finding in the future?
+* What experiments would you run (with unconstrainted resources)?
+- Where is the bottleneck?
+    + Resources
+    + Ideas?
+
+If we had that data (any data you want), what would you do with it?
+- what analysis method would you want?
+    "Functional connectivity for sure!"
+
+lip reading: https://www.youtube.com/watch?v=wg3upHE8qJw
