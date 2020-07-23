@@ -72,27 +72,27 @@ Hebbian Learning
 #### Influential (don't know yet if they are right)
 
 * Attractor models (stable states, represent behavioural variables, memories..)
-    - Feboda lab, just on the edge of being possible to validate.
-    - Hoppfield
+    - Svoboda lab, just on the edge of being possible to validate.
+    - Hopfield
     - pertubations (through optogenetics, microstimulation -> may hammer it off the manifold entirely)
 
 * Experimental observations that spawn new areas of research
    - e.g. Hippocampal place cells (encode high level cognitive variables. just because they encode it doesn't mean that's their job)
    - influential in terms of sparking a lot of research
 
-* Wolfram Shultz (dopamine)
+* Wolfram Schultz (dopamine)
     - trumpf of computational neuroscience (dopamine encoding predicion error?.. this is not the whole story.)
         - found a signal in the brain that looked much like the temporal learning from ML. last in a sequence 
 
 no free lunch theorem
 
-De Carlo
+DiCarlo
 - trained on image recognition task.
 - run stimuli through the network
 - compare activations in layers with those of a monkey activations.
 - feature detectors of ANN for lines, edges, similar to those seen in the monkey.
 
-Aldshousen and Fields
+Olshausen and Fields
 - sparse coding in V1
 - took images, ran through linear coder.
 - combination of reconstruction error term and penalty (of activation of many neurons => have it be sparse)
