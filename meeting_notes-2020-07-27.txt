@@ -1,0 +1,56 @@
+# Meeting 2020-07-27
+
+estimate instantaneous firing rate:
+	kernel smooth (convolve with Gaussian, rectangular window)
+	- half-Gaussian, (causal filter does not go into the future)
+        - trade-offs narrow/wide kernel.
+
+concatinating trials.
+    -> final output cross-correlation function.
+
+time lag should go up with distance.
+- common inputs
+- number of synaptic hops
+euclidian distance, correct proxy for signal distance to propagate in the brain? fibre tracks that curve around.
+
+tests for cross-correlation function, for statistical validity.
+
+spurious correlations,
+    - when you can't distinguish from zero correlation. occationally, spike may like up by chance.
+    - if these two neurons were truly not connected, what would their correlation look like? look at quantiles of correlation.
+    - real cross-correlation functions from data. overlay estimates from NULL-distribution. how high and how low can it go in 95% of the cases. if it is higher than 95% => significant. between 5%-95%, indistinguishable.
+
+model for correlation based on poisson.
+    - what if the neurons in the brain are not poisson?
+
+## Validation
+
+statistical criterion for determining if the result is significant.
+
+re-sampling test (preserve as much structure as you can, preservers autocorrelation, but destroys crosscorrelation).
+    - randomly circularly-permute in time, destroy any temporal 
+shuffle 1 second chunks randomly.
+    - run 10k times for each pair of cells.
+    - calculate a set of intervals, so that no permuted cross correlation value goes outside of the interval more than 5% of the time.
+
+## Cross-correlation
+
+persons correlation.
+
+normalize by subtracting mean first.
+
+normalize by std within windows
+
+transform each vector into Z-scores.
+
+estimate firing rates first.
+
+centred normalized version: should go below zero.
+
+###
+
+for each time lag, calcualte the error bars.
+
+### todo
+
+average across trials.
