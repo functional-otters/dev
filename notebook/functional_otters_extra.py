@@ -109,19 +109,31 @@ import numpy as np
 import datetime
 #dat_LFP = np.load('steinmetz_lfp.npz', allow_pickle=True)['dat']
 #dat_WAV = np.load('steinmetz_wav.npz', allow_pickle=True)['dat']
-print("before load", datetime.datetime.now())
-dat_ST = np.load('steinmetz_st.npz', allow_pickle=True)['dat']
-print("after load", datetime.datetime.now())
+#print("before load", datetime.datetime.now())
+#dat_ST = np.load('steinmetz_st.npz', allow_pickle=True)['dat']
+#print("after load", datetime.datetime.now())
 
 session_idx = 11
+
+print("before load", datetime.datetime.now())
+dat_sess = np.load(f'steinmetz_st_{session_idx}.npz', allow_pickle=True)['dat'][0]
+print("after load", datetime.datetime.now())
+
+#print("dump start")
+#for session_idx in range(len(dat_ST)):
+#  np.savez_compressed(f"steinmetz_st_{session_idx}.npz", dat=[dat_ST[session_idx]])
+#print("dump done")
 
 # select just one of the recordings here. 11 is nice because it has some neurons in vis ctx.
 #dat = dat_LFP[session_idx]
 #print(dat.keys())
 #dat = dat_WAV[session_idx]
 #print(dat.keys())
-dat_sess = dat_ST[session_idx]
-print(dat_sess.keys())
+
+#dat_sess = dat_ST[session_idx]
+#print(dat_sess.keys())
+
+#exit()
 
 """`dat_LFP`, `dat_WAV`, `dat_ST` contain 39 sessions from 10 mice, data from Steinmetz et al, 2019, supplemental to the main data provided for NMA. Time bins for all measurements are 10ms, starting 500ms before stimulus onset (same as the main data). The followin fields are available across the three supplemental files.
 
@@ -174,7 +186,7 @@ def corrcoef_between(s1_filter, s2_filter):
 num_neurons = len(dat_sess['ss'])
 num_trials = len(dat_sess['ss'][1])
 
-trials = np.arange(1)
+trials = np.arange(1) # TODO: use all trials
 
 num_neurons = 50
 
@@ -183,7 +195,7 @@ lag_range = 10  # lags to calculate over in the cross-correlation function
 max_lags_matrix_all = []
 
 
-print("start loop 1", datetime.datetime.now())
+print("start loops", datetime.datetime.now())
 for trial_idx in trials:
 
   max_lags_matrix = np.zeros((num_neurons, num_neurons))
@@ -191,12 +203,12 @@ for trial_idx in trials:
 
   spikes_filter_list = []
 
-  print("start loop 2", datetime.datetime.now())
+  print("in loop 1", datetime.datetime.now())
   for neuron_idx1 in range(num_neurons):
 
     # generate smoothed spike sequence for first neuron
     n1 = gen_spikes_filter(get_spikes(neuron_idx1, trial_idx))
-    print("start loop 3", datetime.datetime.now())
+    print("in loop 2", datetime.datetime.now())
     for neuron_idx2 in range(num_neurons):
 
         # generate smoothed spike sequence for second neuron
