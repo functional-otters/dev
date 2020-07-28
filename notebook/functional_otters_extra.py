@@ -106,9 +106,12 @@ rcParams['figure.autolayout'] = True
 #@title Data loading
 import numpy as np
 
+import datetime
 #dat_LFP = np.load('steinmetz_lfp.npz', allow_pickle=True)['dat']
 #dat_WAV = np.load('steinmetz_wav.npz', allow_pickle=True)['dat']
+print("before load", datetime.datetime.now())
 dat_ST = np.load('steinmetz_st.npz', allow_pickle=True)['dat']
+print("after load", datetime.datetime.now())
 
 session_idx = 11
 
@@ -171,137 +174,6 @@ def corrcoef_between(s1_filter, s2_filter):
 num_neurons = len(dat_sess['ss'])
 num_trials = len(dat_sess['ss'][1])
 
-# neuron_idx_1 = 603 # this is the lucky one
-# neuron_idx_2 = 595 # lucky number second
-
-trial_idx = 42     # meaning of life
-
-corr_matrix = np.zeros((num_neurons, num_neurons))
-
-ss_filter = []
-for neuron_idx in range(num_neurons):
-  s = get_spikes(neuron_idx, trial_idx)
-  #print(f"s spike times {neuron_idx}: {np.where(s == 1)}")
-
-  s_filter = gen_spikes_filter(s)
-  ss_filter.append(s_filter)
-
-corrcoef = np.corrcoef(ss_filter)
-corrcoef = np.nan_to_num(corrcoef)
-#print(corrcoef.shape)
-#print(corrcoef)
-plot_corr_matrix(corrcoef)
-
-# for neuron_idx_1 in range(num_neurons-1):
-#   neuron_idx_2 = neuron_idx_1 + 1
-
-#   s1 = get_spikes(neuron_idx_1, trial_idx)
-#   s2 = get_spikes(neuron_idx_2, trial_idx)
-
-#   print(f"s1 spike times {neuron_idx_1}: {np.where(s1 == 1)}")
-#   print(f"s2 spike times {neuron_idx_2}: {np.where(s2 == 1)}")
-
-#   # plt.figure()
-#   # plt.eventplot(np.where(s1 == 1))
-
-#   # plt.figure()
-#   # plt.eventplot(np.where(s2 == 1))
-
-
-#   s1_filter = gen_spikes_filter(s1)
-#   s2_filter = gen_spikes_filter(s2)
-
-#   # plt.figure()
-#   # plt.plot(s1_filter)
-
-#   # plt.figure()
-#   # plt.plot(s2_filter)
-
-#   corrcoef = corrcoef_between(s1_filter, s2_filter)
-#   corrcoef = np.nan_to_num(corrcoef)
-#   print("corrcoef:", corrcoef)
-#   corr_matrix[neuron_idx_1][neuron_idx_1] = 1
-#   corr_matrix[neuron_idx_2][neuron_idx_1] = corrcoef[1][0]
-#   corr_matrix[neuron_idx_1][neuron_idx_2] = corrcoef[0][1]
-#   corr_matrix[neuron_idx_2][neuron_idx_2] = 1
-
-#   # plt.figure()
-
-# print("corr_matrix:", corr_matrix)
-# plot_corr_matrix(corr_matrix)
-
-# Plot cross correlation function for two neurons
-
-n1 = gen_spikes_filter(get_spikes(620, trial_idx))
-n2 = gen_spikes_filter(get_spikes(580, trial_idx))
-
-corr_all = scipy.signal.correlate(n1, n2, mode='full')
-
-fig, [ax1, ax2, ax3] = plt.subplots(3, 1, figsize=(20, 7))
-ax1.plot(n1)
-ax1.plot(n2)
-ax2.plot(corr_all)
-lags, c, _, _ = ax3.xcorr(n1, n2, maxlags=200);
-
-maxlag = lags[np.argmax(c)]
-print("max correlation is at lag %d" % maxlag)
-
-plt.acorr(n1, maxlags=200);
-
-# Correlation matrix of instantaneous correlations, averaged over trials
-
-trials = np.arange(10) # Set number of trials
-
-corr_matrices = []
-
-for trial_idx in trials:
-
-  ss_filter = []
-
-  for neuron_idx in range(num_neurons):
-    s = get_spikes(neuron_idx, trial_idx)
-    s_filter = gen_spikes_filter(s)
-    ss_filter.append(s_filter)
-
-  corr_matrix = np.nan_to_num(np.corrcoef(ss_filter))
-  corr_matrices.append(corr_matrix)
-
-trial_avg_corr_matrix = np.mean(corr_matrices, axis=0)
-
-plot_corr_matrix(trial_avg_corr_matrix)
-
-# Time-lagged correlations, averaged over trials, for a given lag
-
-lag = -20   # Set lag
-trials = np.arange(100)  # Set number of trials
-num_neurons = len(dat_sess['ss'])
-
-coeffs_all = []
-
-for trial_idx in trials:
-
-  neurons = []
-  neurons_lagged = []
-
-  for neuron_idx in range(num_neurons):
-    n = gen_spikes_filter(get_spikes(neuron_idx, trial_idx))
-    neurons.append(n)
-    n_lagged = np.roll(n, lag)
-    neurons_lagged.append(n_lagged)
-
-  coeffs = [np.corrcoef(neurons[x], neurons_lagged[x])[1, 0] for x in range(num_neurons)]
-  coeffs = np.nan_to_num(coeffs)
-  coeffs_all.append(coeffs)
-
-max_corr = np.max(coeffs_all)
-location = np.where(coeffs_all == np.amax(coeffs_all))
-
-print("Max correlation at lag {} is {}".format(lag, max_corr))
-
-print("Neurons with this correlation are {} {}".format(location[0], location[1]))
-
-# Calculate max lag for each pair of neurons
-
 trials = np.arange(1)
 
 num_neurons = 50
@@ -310,6 +182,8 @@ lag_range = 10  # lags to calculate over in the cross-correlation function
 
 max_lags_matrix_all = []
 
+
+print("start loop 1", datetime.datetime.now())
 for trial_idx in trials:
 
   max_lags_matrix = np.zeros((num_neurons, num_neurons))
@@ -317,12 +191,13 @@ for trial_idx in trials:
 
   spikes_filter_list = []
 
+  print("start loop 2", datetime.datetime.now())
   for neuron_idx1 in range(num_neurons):
 
     # generate smoothed spike sequence for first neuron
     n1 = gen_spikes_filter(get_spikes(neuron_idx1, trial_idx))
-
-    for neuron_idx2 in range(neuron_idx1+1, num_neurons):
+    print("start loop 3", datetime.datetime.now())
+    for neuron_idx2 in range(num_neurons):
 
         # generate smoothed spike sequence for second neuron
         n2 = gen_spikes_filter(get_spikes(neuron_idx2, trial_idx))
@@ -343,48 +218,12 @@ for trial_idx in trials:
 
 avg_max_lags_matrix = np.mean(max_lags_matrix_all, axis=0)
 
-plot_corr_matrix(max_lags_matrix)  # visualise max lags for each neuron pair
+#plot_corr_matrix(max_lags_matrix)  # visualise max lags for each neuron pair
 
-plot_corr_matrix(corr_matrix_resp_lag)
+#plot_corr_matrix(corr_matrix_resp_lag)
 
 # find pairs of neurons with "large" correlation
 
 np.where(corr_matrix_resp_lag > 0.05)
 
-# look at cross-correlation function for these neurons over trials
-
-cs = []
-
-for trial in range(100):
-  n1 = gen_spikes_filter(get_spikes(49, trial))
-  n2 = gen_spikes_filter(get_spikes(28, trial))
-  lags, c, _, _ = plt.xcorr(n1, n2, usevlines=False, linestyle='-', marker=None, linewidth=2, maxlags=200);
-  cs.append(c)
-
-# plot mean of cross correlation function
-
-plt.plot(lags, np.mean(cs, axis=0), lw=4)
-plt.plot(lags, np.mean(cs, axis=0) + np.std(cs, axis=0), c='r')
-plt.plot(lags, np.mean(cs, axis=0) - np.std(cs, axis=0))
-
-# for each neuron, get indices and lags of neurons which correlate highly with it
-
-threshold = 0.01  # need to determine statistically
-
-index_list = []
-lags_list = []
-
-for neuron in range(num_neurons):
-  indices = np.where(corr_matrix_resp_lag[neuron] > threshold)  # which neurons the neuron is "highly" correlated to
-  resp_lags = max_lags_matrix[neuron][indices]  # respective lags for each of these correlations
-
-  index_list.append(indices)
-  lags_list.append(resp_lags)
-
-print(np.array(index_list))
-
-trial_idx = 42
-
-corr = scipy.stats.pearsonr(gen_spikes_filter(get_spikes(634, trial_idx)), gen_spikes_filter(get_spikes(618, trial_idx)))
-print(corr)
-
+print("done", datetime.datetime.now())
