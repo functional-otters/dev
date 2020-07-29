@@ -235,8 +235,8 @@ for trial_idx in trials:
 			#end = datetime.datetime.now()
 			#print("time taken:", end - start)
 
-	np.savez_compressed(f"max_lags_matrix_trial_{trial}_sess_{session_idx}.npz", dat=max_lags_matrix)
-	np.savez_compressed(f"corr_matrix_resp_lag_trial_{trial}_sess_{session_idx}.npz", dat=corr_matrix_resp_lag)
+	np.savez_compressed(f"max_lags_matrix_trial_{trial_idx}_sess_{session_idx}.npz", dat=max_lags_matrix)
+	np.savez_compressed(f"corr_matrix_resp_lag_trial_{trial_idx}_sess_{session_idx}.npz", dat=corr_matrix_resp_lag)
 
 	max_lags_matrix_all.append(max_lags_matrix)
 
