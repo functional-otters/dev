@@ -186,6 +186,23 @@ def corrcoef_between(s1_filter, s2_filter):
 num_neurons = len(dat_sess['ss'])
 num_trials = len(dat_sess['ss'][1])
 
+spiketimes = dat_sess["ss"]
+
+spikes = list(range(len(spiketimes)))
+for i in range(len(spikes)):
+  neuron = np.concatenate([trail for trail in spiketimes[i, :]])
+  spikes[i] = neuron
+
+interesting = []
+count = 0
+for i, neuron in enumerate(spikes):
+  if len(neuron) < 340 * 3:
+    count += 1
+  else:
+    interesting.append(i)
+
+print("Number of virtually inactive neurons:", count)
+
 trials = np.arange(1) # TODO: use all trials
 
 #num_neurons = 50
@@ -194,9 +211,10 @@ lag_range = 10  # lags to calculate over in the cross-correlation function
 
 max_lags_matrix_all = []
 
-
 print("start loops", datetime.datetime.now())
 for trial_idx in trials:
+
+	p_values = np.zeros((num_neurons, num_neurons)) #added (should be inside loop if we have several trails)
 
 	max_lags_matrix = np.zeros((num_neurons, num_neurons))
 	corr_matrix_resp_lag = np.zeros((num_neurons, num_neurons))
@@ -210,12 +228,12 @@ for trial_idx in trials:
 	print("pre-calc filter time taken:", end - start)
 
 	print("in loop 1", datetime.datetime.now())
-	for neuron_idx1 in range(num_neurons):
+	for neuron_idx1 in interesting:
 
 		# generate smoothed spike sequence for first neuron
 		n1 = spikes_filter_list[neuron_idx1]
 		print("in loop 2", datetime.datetime.now())
-		for neuron_idx2 in range(num_neurons):
+		for neuron_idx2 in interesting:
 			#start = datetime.datetime.now()
 
 			# generate smoothed spike sequence for second neuron
@@ -226,6 +244,7 @@ for trial_idx in trials:
 			plt.close()
 			max_lag = lags[np.argmax(c)]
 
+			p_values[neuron_idx1, neuron_idx2] = scipy.stats.pearsonr(n1, np.roll(n2, max_lag))[1] #added
 
 			corr = np.nan_to_num(c[max_lag])
 
@@ -237,6 +256,7 @@ for trial_idx in trials:
 
 	np.savez_compressed(f"max_lags_matrix_trial_{trial_idx}_sess_{session_idx}.npz", dat=max_lags_matrix)
 	np.savez_compressed(f"corr_matrix_resp_lag_trial_{trial_idx}_sess_{session_idx}.npz", dat=corr_matrix_resp_lag)
+	np.savez_compressed(f"p_values_trial_{trial_idx}_sess_{session_idx}.npz", dat=p_values)
 
 	max_lags_matrix_all.append(max_lags_matrix)
 
