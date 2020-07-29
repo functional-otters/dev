@@ -209,7 +209,7 @@ trials = np.arange(1) # TODO: use all trials
 
 lag_range = 10  # lags to calculate over in the cross-correlation function
 
-max_lags_matrix_all = []
+#max_lags_matrix_all = []
 
 print("start loops", datetime.datetime.now())
 for trial_idx in trials:
@@ -258,9 +258,9 @@ for trial_idx in trials:
 	np.savez_compressed(f"corr_matrix_resp_lag_trial_{trial_idx}_sess_{session_idx}.npz", dat=corr_matrix_resp_lag)
 	np.savez_compressed(f"p_values_trial_{trial_idx}_sess_{session_idx}.npz", dat=p_values)
 
-	max_lags_matrix_all.append(max_lags_matrix)
+	#max_lags_matrix_all.append(max_lags_matrix)
 
-avg_max_lags_matrix = np.mean(max_lags_matrix_all, axis=0)
+#avg_max_lags_matrix = np.mean(max_lags_matrix_all, axis=0)
 
 #plot_corr_matrix(max_lags_matrix)  # visualise max lags for each neuron pair
 
@@ -272,4 +272,4 @@ np.where(corr_matrix_resp_lag > 0.05)
 
 print("done", datetime.datetime.now())
 
-np.savez_compressed(f"max_lags_matrix_all_{session_idx}.npz", dat=max_lags_matrix_all)
+#np.savez_compressed(f"max_lags_matrix_all_{session_idx}.npz", dat=max_lags_matrix_all)
