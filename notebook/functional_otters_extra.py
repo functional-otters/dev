@@ -15,12 +15,12 @@ includes some visualizations. foo
 import os, requests
 
 fname = ['steinmetz_st.npz']
-fname.append('steinmetz_wav.npz')
-fname.append('steinmetz_lfp.npz')
+#fname.append('steinmetz_wav.npz')
+#fname.append('steinmetz_lfp.npz')
 
 url = ["https://osf.io/4bjns/download"]
-url.append("https://osf.io/ugm9v/download")
-url.append("https://osf.io/kx3v9/download")
+#url.append("https://osf.io/ugm9v/download")
+#url.append("https://osf.io/kx3v9/download")
 
 for j in range(len(url)):
 	if not os.path.isfile(fname[j]):
